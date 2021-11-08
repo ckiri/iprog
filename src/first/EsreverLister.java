@@ -1,5 +1,11 @@
 package first;
 
+/**
+ * EsreverLister
+ * @author DDeifel, DMaric, DAgres, CKiriakou
+ * @version 11.10.2021
+ **/
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
