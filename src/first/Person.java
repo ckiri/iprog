@@ -1,78 +1,142 @@
 package first;
 
 import java.util.*;
+
 /**
+ * Die es Ihnen erlaubt, Personen-Objekte zu erzeugen. Für Personen-Objekte gibt es zwei verschiedene Konstruktoren. 
+ * Beim ersten werden alle Attribute einer Person als Parameter übergeben, 
+ * beim zweiten werden sie im Konstruktor interaktiv bestimmt (die Parameterliste ist also leer). 
+ * Eine Person hat Vorname, Name, Beruf (Strings) und ein Geburtsjahr (int). Weiterhin soll es eine Methode toString() geben, 
+ * welche als ReturnWert alle relevanten Informationen über eine Person als einen String herausgibt. 
+ * Entwerfen, implementieren und testen Sie die Klasse in der mainMethode. 
+ * (Erzeugen Sie also mehrere Personen-Objekte (auf verschiedene Art) und geben Sie anschließend deren Daten auf den Bildschirm aus.)
  * 
- * @author Chris
- *
+ * @author DDeifel, DMaric, DAgres, CKiriakou
+ * @version 2, 25.10.2021
  */
-public class Person {
-	// Personenobjekte
-    protected String vorname, name, beruf, geburtsort, groesse;
-    protected int geburtsjahr;
-    protected float hoehe;
-    
-    public void compareWith(Person persVorgegeben, Person persInteraktiv) {
-    	if(persVorgegeben.hoehe < 1.49)
-    	{
-    		groesse = "klein";
-    	}
-    	else if(hoehe <= 1.82)
-    		{
-    			groesse = "mittelgroß";
-    		}
-    	else
-    	{
-    		groesse = "groß";
-    	}
+
+public class Person 
+{
+    private String vorname, name, beruf, geburtsort, größenbereich;
+    private int geburtsjahr, alter;
+    private float körpergröße;
+
+    public Person(String vorname, String n, String b, String gbo, int gb, float gr)
+    {
+        this.vorname = vorname;
+        this.name = n;
+        this.beruf = b;
+        this.geburtsort = gbo;
+        this.geburtsjahr = gb;
+        this.körpergröße = gr;
+
+        this.alter = this.getAlter();
+        this.größenbereich = this.getGrößenbereich();
     }
     
-    @Override
-    public String toString() {
-    	String oneLine;
-    	int jahr = new GregorianCalendar().get(Calendar.YEAR);
-    	int alter = jahr - geburtsjahr;
-    	String groesse;
-    	if(hoehe < 1.49)
-    	{
-    		groesse = "klein";
-    	}
-    	else if(hoehe <= 1.82)
-    		{
-    			groesse = "mittelgroß";
-    		}
-    	else
-    	{
-    		groesse = "groß";
-    	}
-    	oneLine = "Die Person heißt " + this.vorname + " " + this.name + ", arbeitet als " + this.beruf
-    			+ " & wurde im Jahr " + this.geburtsjahr + " in " + this.geburtsort + " geboren, ist demnach " + alter + " alt"
-    			+ " und ist " + this.hoehe + "m " + groesse;
-    	return oneLine;
+    public Person()
+    {
+        System.out.println();
+        System.out.println("Beschreibe eine Person:");
+        this.vorname = MyIO.promtAndRead("Vorname: ");
+        this.name = MyIO.promtAndRead("Name: ");
+        this.beruf = MyIO.promtAndRead("Beruf: ");
+        this.geburtsort = MyIO.promtAndRead("Geburtsort: ");
+        this.geburtsjahr = MyIO.readInt("Geburtsjahr: ");
+        this.körpergröße = MyIO.readFloat("Körpergröße in Meter: ");
+
+        this.alter = this.getAlter();        
+        this.größenbereich = this.getGrößenbereich();
     }
-	// interaktiver Konstruktor
-    public Person(){
-    	this.vorname = MyIO.promptAndRead("Vorname: ");
-    	this.name = MyIO.promptAndRead("Name: ");
-    	this.beruf = MyIO.promptAndRead("Beruf: ");
-    	this.geburtsjahr = MyIO.readInt("Geburtsjahr: ");
-    	this.geburtsort = MyIO.promptAndRead("Geburtsort: ");
-    	this.hoehe = MyIO.readFloat("Körpergröße: ");
+
+    @Override   //toString Methode von Anfang an vorhanden, wird überschrieben für logischere Ausgabe
+    public String toString()
+    {
+        return this.name + " " + this.vorname + ", arbeitet als " + this.beruf 
+            + ", ist " + this.körpergröße + "m " + this.größenbereich + " und wurde im Jahr " + this.geburtsjahr 
+                + " in " + this.geburtsort + " geboren, damit ist er/ sie " + this.alter + " Jahre alt.";
     }
-    // vorgegebener Konstruktor
-    public Person(String vorname, String name, String beruf, int geburtsjahr, String geburtsort, float hoehe) {
-    	this.vorname = vorname;
-    	this.name = name;
-    	this.beruf = beruf;
-    	this.geburtsjahr = geburtsjahr;
-    	this.geburtsort = geburtsort;
-    	this.hoehe = hoehe;
+
+    public int getAlter()
+    {
+        return new GregorianCalendar().get(Calendar.YEAR) - this.geburtsjahr;
+    }
+
+    public String getGrößenbereich()
+    {
+        if(körpergröße < 1.49f)
+        {
+            return "klein";
+        }
+        else
+        {
+            if(körpergröße > 1.82f)
+            {
+                return "groß";
+            }
+            else
+            {
+                return "mittel groß";
+            }
+        }
+    }
+
+    public void compareWith(Person x)
+    {
+        System.out.println();
+
+        if( this.körpergröße < x.körpergröße )
+        {
+            System.out.println(x.name + " " + x.vorname + " ist " + (x.körpergröße - this.körpergröße) + "m größer als " 
+                + this.name + " " + this.vorname + ".");
+        }
+        else if( this.körpergröße == x.körpergröße )
+            {
+                System.out.println(this.name + " " + this.vorname + " und " + x.name + " " + x.vorname 
+                    + " sind mit " + this.körpergröße + "m gleich groß.");
+            }
+            else
+            {
+                System.out.println(this.name + " " + this.vorname + " ist " + (this.körpergröße - x.körpergröße) + "m größer als " 
+                    + x.name + " " + x.vorname + ".");
+            }
+    
+
+        if( this.alter < x.alter )
+        {
+            System.out.println(x.name + " " + x.vorname + " ist " + (x.alter - this.alter) + " Jahre älter als " 
+                + this.name + " " + this.vorname + ".");
+        }
+        else if( this.alter == x.alter )
+            {
+                System.out.println(this.name + " " + this.vorname + " und " + x.name + " " + x.vorname 
+                    + " sind mit " + this.alter + " Jahren gleich alt.");
+            }
+            else
+            {
+                System.out.println(this.name + " " + this.vorname + " ist " + (this.alter - x.alter) + " Jahre älter als " 
+                    + x.name + " " + x.vorname + ".");
+            }
     }
     
-    // main Methode mit vorgegebener und interaktiver Person
-    public static void main(String[] args) {
-    	Person p1 = new Person("Joseph", "Robinette Biden", "Präsident der Vereinigten Staaten", 1942, "Scranton, Pensylvania U.S", 1.83f);
-    	Person p2 = new Person();
-    	System.out.println(p1+"\n"+p2);
+    public static void main (String[] args)
+    {
+        Person person1 = new Person("Biden", "Joseph", "Präsident der Vereinigten Staaten", "Pennsylvania", 1942, 1.8f);
+        Person person2 = new Person("Mustermann", "Max", "Kaufmann", "Heilbronn", 1975, 2.1f);
+        Person person3 = new Person("Musterfrau", "Erika", "Softwareentwicklerin", "Berlin", 1987, 1.6f);
+        Person person4 = new Person(); 
+
+        Person p[] = {person1, person2, person3, person4};
+
+        int j = 1;
+        for(Person i : p)
+        {
+            System.out.println();
+            System.out.println("Person " + j++);
+            System.out.println(i.toString());
+        }
+
+        person4.compareWith(person1);
+        person2.compareWith(person3);
     }
 }

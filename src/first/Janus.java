@@ -1,24 +1,38 @@
 package first;
+
 import java.io.BufferedReader;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Janus {
-    public static void main (String[] a) throws IOException{
-        String inputLine;
-        // Vom Dateinamen zum FileInputStream
-        File            f = new File("src/first/Janus.java");
-        FileInputStream fs = new FileInputStream(f);
-        // Vom FileInputStream zum BufferedReader
-        InputStreamReader isr;
-        BufferedReader    fileInput;
-        isr = new InputStreamReader(fs);
-        fileInput = new BufferedReader(isr);
-        inputLine = fileInput.readLine();
+/**
+ * das seinen eigenen Programmtext auf den Bildschirm ausgibt.
+ * @author DDeifel, DMaric, DAgres, CKiriakou
+ * @version 1, 11.10.2021
+ */
 
-        while(inputLine != null) {
-            System.out.println(inputLine);
-            inputLine = fileInput.readLine();
+public class Janus 
+{
+    public static void main (String[] args) throws IOException
+    {
+        //File f = new File("first/Janus.java");
+        //File f = new File("C:\\Users\\Denni\\Documents\\Interaktive Programme\\first\\Janus.java");
+        File f = new File("C:/Users/Denni/Documents/Interaktive Programme/first/Janus.java");
+        FileInputStream fStream = new FileInputStream(f);
+
+        InputStreamReader isr;
+        BufferedReader fileInput;
+        isr = new InputStreamReader(fStream);
+        fileInput = new BufferedReader(isr);
+        
+        String line = fileInput.readLine();
+        while (line != null)
+        {
+            System.out.println(line);
+            line = fileInput.readLine();
         }
+
+        fileInput.close();
     }
 }

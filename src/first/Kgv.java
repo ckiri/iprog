@@ -1,32 +1,42 @@
 package first;
 
-/**
- * Person.java
- * @author DMaric, DDeifel, CKirakou, DAgres
- * @version 1, 25.10.21
- **/
-
 import java.math.BigInteger;
 
-public class Kgv {
-	
-	private static BigInteger ggT(BigInteger x, BigInteger y) {
-		return y.equals(BigInteger.ZERO) ? x : ggT (y, x.mod(y));
-	}
-	private static BigInteger rdD(BigInteger x, BigInteger y) {    //rdd = rest der Divison
-		return x.mod(y);
-	}
-	
-	private static BigInteger kgV(BigInteger x, BigInteger y) {
-		return (x.multiply(y)).divide(ggT(x,y));
-	}
+/**
+ * das zwei beliebig große Zahlen (BigInteger) x und y kommentiert einliest 
+ * und anschließend sowohl das kleinste gemeinsame Vielfache (kgV) von x und y 
+ * als auch den Rest bei der Division von x durch y korrekt berechnet und kommentiert ausgibt. 
+ * Hinweis: kgV(x,y) = x*y/ggT(x,y)
+ * 
+ * @author DDeifel, DMaric, DAgres, CKiriakou
+ * @version 1, 25.10.2021
+ */
 
-	public static void main(String[] args) {
+public class Kgv
+{
+    public static BigInteger getKgV (BigInteger x, BigInteger y) 
+    {
+        return ( x.multiply( y.divide( getGgt(x, y) )));    //"BigInteger x.gcd(y)" gibt auch den GgT/ "greatest common divisor" aus.
+    }
 
-        BigInteger x = MyIO.readBigInteger("Geben Sie ein X-Wert ein: ");
-		BigInteger y = MyIO.readBigInteger("Geben Sie ein Y-Wert Zahl ein: ");
+    public static BigInteger getGgt (BigInteger x, BigInteger y) 
+    {
+        if( x.equals(y) || y.equals(BigInteger.ZERO)) return x;
+        else return getGgt(y, x.mod(y));
+    }
 
-		System.out.println("Das kleinste gemeinsame Vielfache von x und y beträgt " + kgV(x, y));
-		System.out.println("Der Rest bei der Divison x durch y ist " + rdD(x,y));
-	}
+    public static BigInteger getRest(BigInteger x, BigInteger y) 
+    {
+        return x.mod(y);
+    }
+
+    public static void main (String[] args)
+    {
+        System.out.println("Berechnung des kleinsten gemeinsamen Vielfaches (kgV) von zwei Zahlen:");
+        BigInteger x = new BigInteger( MyIO.promtAndRead("x = ").trim() );
+        BigInteger y = new BigInteger( MyIO.promtAndRead("y = ").trim() );
+
+        System.out.println("Das kleinste gemeinsame Vielfache von " + x + " und " + y + " beträgt " + getKgV(x, y));
+        System.out.println("Der Rest der Division von " + x + " und " + y + " beträgt " + getRest(x, y));
+    }
 }

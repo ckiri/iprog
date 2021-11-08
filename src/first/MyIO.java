@@ -18,7 +18,7 @@ public final class MyIO
      */
     static Scanner sc = new Scanner(System.in);
 
-    public static String promptAndRead (String prompt)
+    public static String promtAndRead (String prompt)
     {
         System.out.print(prompt);
         return sc.nextLine();

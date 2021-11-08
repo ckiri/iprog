@@ -1,41 +1,52 @@
 package first;
-/**
- * Filter
- * @author DMaric, DDeifel, DAgres, CKirakou
- * @version 1, 11.10.2021
- **/
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 
-public class Filter {
-    public static void main(String[] args) throws IOException {
+/**
+ * das den Benutzer erst nach der URL einer Text-Quelle im Internet und dann nach einem Text-String (dem Muster) fragt, 
+ * beide Informationen einliest und dann genau nur diejenigen Zeilen der Quelle auf den Bildschirm ausgibt, 
+ * in denen das Muster (unabhängig von Groß-Kleinschreibung) enthalten ist.
+ * @author DDeifel, DMaric, DAgres, CKiriakou
+ * @version 1, 11.10.2021
+ */
+
+public class Filter 
+{
+    public static void main(String[] args) throws IOException
+    {
         InputStreamReader isr;
         BufferedReader keyboard;
-        BufferedReader keyboard2;
-        isr = new InputStreamReader(System.in);
-        keyboard = new BufferedReader(isr);
-        keyboard2 = new BufferedReader(isr);                                        //Input System
+        isr = new InputStreamReader (System.in);
+        keyboard = new BufferedReader (isr);
 
+        System.out.println("Zu durchsuchende URL im Internet:");
+        String internet = keyboard.readLine();   // "https://www.whitehouse.gov/"
 
-        String url;
-        System.out.println("From which Website do you want to Filter?");
-        url = keyboard.readLine();
-        URL inputURL = new URL(url);                                                //Input URL
-
-        FilterInputStream ins = (FilterInputStream) inputURL.openStream();
+        URL u = new URL (internet);
+        FilterInputStream ins = (FilterInputStream) u.openStream();
         InputStreamReader isr2 = new InputStreamReader(ins);
-        BufferedReader website = new BufferedReader(isr2);
-        String search = website.readLine();                                          // Website search tool
+        BufferedReader webside = new BufferedReader(isr2);
 
-        String word;
-        System.out.println("What is the Keyword you are searching for?");
-        word = keyboard2.readLine();                                                 //Input Word
+        System.out.println("Zu suchendes Wort:");
+        String muster = keyboard.readLine();    // "Jill"
 
-        while(search != null){                                                       //While Schleife
-            if(search.contains(word)){
-                System.out.println(search);
+        int a = 0;
+        String line = webside.readLine();
+        while (line != null) 
+        {
+            if ( line.toLowerCase().contains( muster.toLowerCase() ) ) 
+            {
+                System.out.println(line);
+                a++;
             }
-                search = website.readLine();
+            line = webside.readLine();
         }
+
+        System.out.println();
+        System.out.println("Gefundene Zeilen: " + a);
     }
 }

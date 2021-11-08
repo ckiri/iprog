@@ -1,58 +1,61 @@
 package first;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 
 /**
- *
- * @author Dennis Deifel, Denis Maric, Dominik Agres, Chris Kiriakou
- * @version 1, 12.10.2021
- **/
+ * das vom Benutzer zwei Texte einliest und daraus fünf verschiedene Palindrome macht, die jeweils beide Texte enthalten. 
+ * Die so erzeugten Palindrome sollen sowohl auf den Bildschirm als auch in die Datei "palindrom.txt" geschrieben werden.
+ * @author DDeifel, DMaric, DAgres, CKiriakou
+ * @version 1, 11.10.2021
+ */
 
-public class PalindromGenerator{
-
-    public static String invert(String h){
-
-        return h.length()<= 1 ? h :
-                invert(h.substring(1)) + h.substring(0, 1);                                 //invert method
+public class PalindromGenerator
+{
+    public static String invert (String x) 
+	{
+		return x.length() <= 1 ? x :
+		invert( x.substring(1) ) + x.substring(0,1);
     }
 
-    public static void main(String[] args) throws IOException {
-        InputStreamReader isr;
+    public static void main(String[] args) throws IOException
+    {
+        InputStreamReader isr;                      //Eingabe der Tastatur
         BufferedReader keyboard;
-        BufferedReader keyboard2;
-        isr = new InputStreamReader(System.in);
-        keyboard = new BufferedReader(isr);
-        keyboard2 = new BufferedReader(isr);                                                // Input for 2 texts
+        isr = new InputStreamReader (System.in);
+        keyboard = new BufferedReader (isr);
 
-        System.out.println("Text 1:");
+        System.out.println("Nennen Sie den Inhalt von Text 1:");
         String text1 = keyboard.readLine();
-        System.out.println("Text 2:");
-        String text2 = keyboard2.readLine();                                                // Text Input and question
+        System.out.println("Nennen Sie den Inhalt von Text 2:");
+        String text2 = keyboard.readLine();
 
-        String[] array;                                                                     //arrays
-        array = new String[7];
+        String[] array = new String[7];
         array[0] = text1;
         array[1] = text2;
 
-        array[2] = array[0]+array[1] + invert(array[1])+invert(array[0]);
-        array[3] = array[1]+array[0] + invert(array[0]) + invert(array[1]);
+        array[2] = array[0] + array[1] + invert(array[1]) + invert(array[0]);
+        array[3] = array[1] + array[0] + invert(array[0]) + invert(array[1]);
         array[4] = invert(array[0]) + invert(array[1]) + array[1] + array[0];
         array[5] = invert(array[1]) + invert(array[0]) + array[0] + array[1];
         array[6] = invert(array[0]) + array[1] + invert(array[1]) + array[0];
+        
+        for (int i = 2; i <= 6; i++) 
+        {
+            System.out.println(array[i]);
+        }
 
-        System.out.println(array[2]);
-        System.out.println(array[3]);
-        System.out.println(array[4]);
-        System.out.println(array[5]);
-        System.out.println(array[6]);                                                       //Palindrom generator
+        File f = new File("first/palindrom.txt");
+        PrintStream target = new PrintStream( new FileOutputStream(f));
+        for (int i = 2; i <= 6; i++) 
+        {
+            target.println(array[i]);
+        }
 
-        File f = new File("src/first/palindrom.txt");
-        PrintStream target = new PrintStream(new FileOutputStream(f));
-        target.println(array[2]);
-        target.println(array[3]);
-        target.println(array[4]);
-        target.println(array[5]);
-        target.println(array[6]);                                                           //input file
+        target.close();
     }
-
 }

@@ -1,29 +1,31 @@
-/**
- * Ggt
- * @author DMaric, DDeifel, DAgres, CKirakou
- * @version 1, 18.10.21
- * */
-
-
 package first;
 
-public class Ggt {
+/**
+ * welches den größten gemeinsamen Teiler (ggT) zweier eingelesener positiver Zahlen x und y bestimmt und kommentiert ausgibt. 
+ * Dies soll wiederholt werden, bis eine leere Eingabe erfolgt.
+ * @author DDeifel, DMaric, DAgres, CKiriakou
+ * @version 1, 18.10.2021
+ */
 
-    public static void main(String[] args) {
-        int x1 = MyIO.readInt("Nummer 1: ");
-        int y1 = MyIO.readInt("Nummer 2: ");
-        int i1 = 0;
+public class Ggt 
+{
+    public static int getGgt (int x, int y)
+    {
+        if( x == y || y == 0 ) return x;
+        else return getGgt(y, x%y);
+    } 
 
-        System.out.println(ggT(x1, y1, i1));
+    public static void main (String[] args)
+    {
+        String eingabe = MyIO.promtAndRead("Erste Zahl: ");
 
-    }
-
-    public static int ggT (int x, int y, int i){
-        i = x % y;
-        x = y;
-        y = i;
-        return y == 0 ? x :
-                ggT(x, y, i);
+        while( eingabe.length() > 0)
+        {
+            int x = Integer.parseInt(eingabe);
+            int y = MyIO.readInt("Zweite Zahl: ");
+            System.out.println( "Der größte gemeinsame Teiler von " + x + " und "+ y + " ist " + getGgt(x, y) );
+            eingabe = MyIO.promtAndRead("Erste Zahl: ");
         }
-
+        System.out.println("Ende");
+    }
 }
