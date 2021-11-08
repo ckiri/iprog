@@ -1,7 +1,5 @@
 package first;
 
-import javax.sound.sampled.LineListener;
-
 /**
  * das die sin-Funktion für einen eingelesenen x-Wert entsprechend dieser Summe approximiert und ausgibt:
  * @author DDeifel, DMaric, DAgres, CKiriakou
@@ -10,17 +8,28 @@ import javax.sound.sampled.LineListener;
 
 public class Sinus 
 {
+    public static double sin(long x, int k) 
+    {
+        return (-1) * x * x / (2*k) / (2*(k+1));
+    }
+
     public static void main(String[] args) 
     {
         long x = MyIO.readLong("x = ");
-        int k = 0, n = 1, maxIterations = 10000;
-        double maxError = 1e-10, xn = 1.0, xnSumme = 0;
+        int k = 1, n = 10000;
+        double maxError = 1e-10;
+        double xn = (long) x, xnPlus1 = xn;
+        int i = 0;
 
-        while( Math.abs((xnSumme - xn)) >= maxError && n < maxIterations)
+        do
         {
-            xn = (-1)*x*x / (2*k) / (2*(k+1));
-            xnSumme = xnSumme + xn;
-            k++; n++;
+            xn = xnPlus1;
+            xnPlus1 = xn + sin(x, k);
+            k++;
+            System.out.println(i++);
         }
+        while( Math.abs(xnPlus1 - xn) >= maxError && k < n);
+        
+        System.out.println(xn + " " + xnPlus1);
     }   
 }
