@@ -16,9 +16,7 @@ public class Janus
 {
     public static void main (String[] args) throws IOException
     {
-        //File f = new File("first/Janus.java");
-        //File f = new File("C:\\Users\\Denni\\Documents\\Interaktive Programme\\first\\Janus.java");
-        File f = new File("C:/Users/Denni/Documents/Interaktive Programme/first/Janus.java");
+        File f = new File("/first/Janus.java");
         FileInputStream fStream = new FileInputStream(f);
 
         InputStreamReader isr;
