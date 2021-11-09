@@ -28,32 +28,52 @@ public class EsreverLister
 
     public static void main(String[] args) throws IOException 
     {
-        System.out.println("Ende mit potS oder ^Z.");
-        System.out.println();
+        BufferedReader fileInput = new BufferedReader(new InputStreamReader( new FileInputStream( 
+            new File("C:\\Users\\Denni\\Documents\\262003 Interaktive Programme\\first\\EsreverLister.java"))));
+
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
 
-        BufferedReader fileInput = new BufferedReader(new InputStreamReader( new FileInputStream( 
-                new File("C:\\Users\\Denni\\Documents\\262003 Interaktive Programme\\first\\EsreverLister.java"))));
+        System.out.println("Es werden Text-Zeilen von der Tastaur eingelesen, solange bis das Wort „potS“ eingegeben wird");
+        System.out.println();
 
-        List<String> WordList = new ArrayList<String>();
+        System.out.println("Test wird durchgeführt:");
+        List<String> WordList1 = new ArrayList<String>();
         while(true)
         {
-            //System.out.print("-> ");
-            //String s = keyboard.readLine();
-
             String s = fileInput.readLine();
 
             if( s == null || s.equalsIgnoreCase("potS"))
             {
                 break;
             }
-            WordList.add(invert(s));
+            WordList1.add(invert(s));
         }
 
-        ListIterator<String> x = WordList.listIterator(WordList.size());
+        ListIterator<String> x = WordList1.listIterator(WordList1.size());
         while(x.hasPrevious())
         {
             System.out.println(x.previous());
+        }
+
+        System.out.println();
+        System.out.println("Jetzt gehts los. Bitte Text-Zeile eingeben (Für Stop „potS“ eingeben):");
+        List<String> WordList2 = new ArrayList<String>();
+        while(true)
+        {
+            System.out.print("-> ");
+            String s = keyboard.readLine();
+
+            if( s == null || s.equalsIgnoreCase("potS"))
+            {
+                break;
+            }
+            WordList2.add(invert(s));
+        }
+
+        ListIterator<String> x2 = WordList2.listIterator(WordList2.size());
+        while(x2.hasPrevious())
+        {
+            System.out.println(x2.previous());
         }
 
         System.out.println("Ende");
