@@ -8,28 +8,35 @@ package first;
 
 public class Sinus 
 {
-    public static double sin(long x, int k) 
+    public static double sin(long x)
     {
-        return (-1) * x * x / (2*k) / (2*(k+1));
+        int k = 1;      //k Variable
+        int n = 0;      //Zähler Iteration
+        double maxIterations = 10000;   //Parameter maxIteration
+        double maxError = 1e-10;        //Parameter max error
+        double xn = x;                  //(long) redundant, x ist long
+        double xnPlus1 = x;
+
+        int i = 0;  //Zähler
+
+        //Hier: xn und xnPlus1 haben den Wert x
+
+        do{
+            xn = xnPlus1;
+            xnPlus1 = xn + ( (-1) * x * x / (2*k) / ((2 * k) +1));     //xnPlus1 = formel ?  x ist long / Zahlen und k sind int
+            n++; k++;
+
+            System.out.println(i); i++;         //Zähler, später löschen
+
+        } while(Math.abs(xnPlus1-xn) >= maxError && n < maxIterations);
+
+        return xnPlus1;     //return ???
     }
 
     public static void main(String[] args) 
     {
         long x = MyIO.readLong("x = ");
-        int k = 1, n = 10000;
-        double maxError = 1e-10;
-        double xn = (long) x, xnPlus1 = xn;
-        int i = 0;
+        System.out.println(sin(x));
 
-        do
-        {
-            xn = xnPlus1;
-            xnPlus1 = xn + sin(x, k);
-            k++;
-            System.out.println(i++);
-        }
-        while( Math.abs(xnPlus1 - xn) >= maxError && k < n);
-        
-        System.out.println(xn + " " + xnPlus1);
     }   
 }
