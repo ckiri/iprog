@@ -21,7 +21,8 @@ public class EsreverLister {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Ende mit potS oder ^Z.");                                        //Message beim aufruf
+        System.out.println("Die eingegebenen Zeilen werden invertiert und umgekehrter Rheinfolge wiedergegeben.");
+        System.out.println("Ende das Programm mit potS oder ^Z.");                           //Message beim aufruf
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));      //Input reader
         List<String> WordList = new ArrayList<String>();                                     //ArrayList (s.38 - 43)
         for (;;){                                                                            //Always True for-schleife
@@ -33,12 +34,15 @@ public class EsreverLister {
             WordList.add(invert(s));                                                         //Hier wird die Invertierte String S zur WorteListe geaddet
             }
 
+        System.out.println("Wiedergabe invertiert und umgekehrt: ");
+        System.out.println();
+
             ListIterator<String> x = WordList.listIterator(WordList.size());                 //nuer Iterator x mit worterliste
             while(x.hasPrevious()){
                 System.out.println(x.previous());
             }                                                                                //While x noch zeilen hat dann drückt er sie
-
-        System.out.println("Ende.");                                                         //Schluss ende
+        System.out.println();
+        System.out.println("Ende des Programms.");                                          //Schluss ende
         keyboard.close();
     }
 }
