@@ -28,9 +28,13 @@ public class Schnecke {
 	public static void main(String[] args) {
 		
 		int n;
-		n = MyIO.readInt("Wählen Sie eine Zahl zwischen 0 und 45: ");
+		n = MyIO.readInt("Wï¿½hlen Sie eine Zahl zwischen 0 und 45: ");
+		if (n >= 0 && n <= 45){
 		String[][] matrix = new String[n][n];
-		zweiD(matrix);
+		zweiD(matrix);} else {
+			System.out.println();
+			System.out.println("Die Zahl die Sie eingegeben haben ist ungÃ¼ltig.");
+		}
 	}
 }
 	
