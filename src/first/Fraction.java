@@ -29,6 +29,11 @@ public class Fraction extends Number implements Comparable<Fraction>
         return this.zaehler + "/" + this.nenner;
     }
 
+    public boolean isInteger(BigInteger a, BigInteger b){
+        BigInteger x = BigInteger.valueOf(0);
+        return a.mod(b).equals(x);
+    }
+
     @Override
     public int intValue()
     {
@@ -58,4 +63,6 @@ public class Fraction extends Number implements Comparable<Fraction>
     {
         return 0;
     }
+
+
 }
