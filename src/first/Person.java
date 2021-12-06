@@ -10,16 +10,17 @@ import java.util.*;
  * welche als ReturnWert alle relevanten Informationen über eine Person als einen String herausgibt. 
  * Entwerfen, implementieren und testen Sie die Klasse in der mainMethode. 
  * (Erzeugen Sie also mehrere Personen-Objekte (auf verschiedene Art) und geben Sie anschließend deren Daten auf den Bildschirm aus.)
- * 
  * @author DDeifel, DMaric, DAgres, CKiriakou
- * @version 2, 25.10.2021
+ * @version 2, 06.12.2021
  */
 
-public class Person 
+public class Person implements Comparable<Person> , Cloneable , SimpleTreeNode
 {
-    private String vorname, name, beruf, geburtsort, größenbereich;
-    private int geburtsjahr, alter;
-    private float körpergröße;
+    protected String vorname, name, beruf, geburtsort, größenbereich;
+    protected int geburtsjahr, alter;
+    protected float körpergröße;
+
+    private SimpleTreeNode treenode = new DefaultTreeNode("");
 
     public Person(String vorname, String n, String b, String gbo, int gb, float gr)
     {
@@ -33,7 +34,7 @@ public class Person
         this.alter = this.getAlter();
         this.größenbereich = this.getGrößenbereich();
     }
-    
+
     public Person()
     {
         System.out.println();
@@ -47,14 +48,6 @@ public class Person
 
         this.alter = this.getAlter();        
         this.größenbereich = this.getGrößenbereich();
-    }
-
-    @Override   //toString Methode von Anfang an vorhanden, wird überschrieben für logischere Ausgabe
-    public String toString()
-    {
-        return this.name + " " + this.vorname + ", arbeitet als " + this.beruf 
-            + ", ist " + this.körpergröße + "m " + this.größenbereich + " und wurde im Jahr " + this.geburtsjahr 
-                + " in " + this.geburtsort + " geboren, damit ist er/ sie " + this.alter + " Jahre alt.";
     }
 
     public int getAlter()
@@ -79,6 +72,14 @@ public class Person
                 return "mittel groß";
             }
         }
+    }
+
+    @Override   //toString Methode von Anfang an vorhanden, wird überschrieben für logischere Ausgabe
+    public String toString()
+    {
+        return this.name + " " + this.vorname + ", arbeitet als " + this.beruf 
+            + ", ist " + this.körpergröße + "m " + this.größenbereich + " und wurde im Jahr " + this.geburtsjahr 
+                + " in " + this.geburtsort + " geboren, damit ist er/ sie " + this.alter + " Jahre alt.";
     }
 
     public void compareWith(Person x)
@@ -118,25 +119,109 @@ public class Person
                     + x.name + " " + x.vorname + ".");
             }
     }
-    
+
+    @Override
+    public int compareTo(Person o) 
+    {
+        return (vorname + name).compareTo(o.vorname + o.name);
+    }
+
+    public static void bubbleSort(Person[] p) 
+    {
+        boolean sorted;
+        do 
+        {
+            sorted = true;
+            for (int i = 0; i < p.length-1; i++) 
+            {
+                if (p[i].compareTo(p[i+1]) > 0)
+                {
+                    Person tmp = p[i];
+                    p[i] = p[i+1];
+                    p[i+1] = tmp;
+                    sorted = false;
+                }
+            }
+        } while (!sorted);   
+    }
+
+    public void addChild (SimpleTreeNode child)
+    {
+        treenode.addChild (child);
+    }
+        
+    public int getChildCnt()
+    {
+        return treenode.getChildCnt();
+    }
+        
+    public SimpleTreeNode getChild (int pos)
+    {
+        return treenode.getChild (pos);
+    }
+
+    public static void print (Person n, String indent)
+    {
+        System.out.println (indent + n.name + " " + n.vorname);
+        for (int i=0; i < n.getChildCnt(); i++)
+        {
+            print ((Person)n.getChild(i), indent+" ");
+        }
+    }
+
+   
+    public Person clone()
+    {
+        Person x = new Person(vorname, name, beruf, geburtsort, geburtsjahr, körpergröße);
+        x.treenode = this.treenode;
+        return x;
+    }
+
     public static void main (String[] args)
     {
         Person person1 = new Person("Biden", "Joseph", "Präsident der Vereinigten Staaten", "Pennsylvania", 1942, 1.8f);
         Person person2 = new Person("Mustermann", "Max", "Kaufmann", "Heilbronn", 1975, 2.1f);
-        Person person3 = new Person("Musterfrau", "Erika", "Softwareentwicklerin", "Berlin", 1987, 1.6f);
-        Person person4 = new Person(); 
+        Person person3 = new Person("Mustermann", "Corinna", "Softwareentwicklerin", "Berlin", 1987, 1.6f);
+        Person person4 = new Person("Schneider", "Thomas", "Fußballer", "München", 1979, 1.7f);
+        Person person41 = new Person("Schneider", "Erika", "Köchin", "München", 1999, 1.6f);
+        Person person411 = new Person("Schneider", "Dominik", "Schüler", "München", 2008, 1.5f);
+        Person person42 = new Person("Schneider", "Denis", "Fußballer", "München", 2000, 1.75f);
+        Person person421 = new Person("Schneider", "Vitali", "Rennfahrer", "München", 2008, 1.7f);
+        Person person422 = new Person("Schneider", "Lukas", "Student", "München", 2007, 1.65f);
+        Person person4221 = new Person("Schneider", "Arne", "Neugeboren", "München", 2021, 1.7f);
+        Person person43 = new Person("Schneider", "Chris", "Mechaniker", "München", 1989, 1.8f);
 
-        Person p[] = {person1, person2, person3, person4};
+        Person p[] = {person1, person2, person3, person4, person41, person411, person42, person421, person422, person4221, person43};
+
+        bubbleSort(p);
 
         int j = 1;
+        System.out.println("Sortierte Liste der Personen:");
         for(Person i : p)
         {
-            System.out.println();
             System.out.println("Person " + j++);
             System.out.println(i.toString());
         }
 
-        person4.compareWith(person1);
-        person2.compareWith(person3);
+        person4.addChild(person41);
+        person4.addChild(person42);
+        person4.addChild(person43);
+        person41.addChild(person411);
+        person42.addChild(person421);
+        person42.addChild(person422);
+        person422.addChild(person4221);
+
+
+        System.out.println();
+        System.out.println("Stammbaum aller Personen:");
+        print(person1, "");
+        print(person2, "");
+        print(person3, "");
+        print(person4, "");
+
+        Person person4_clone = person4.clone();
+        System.out.println();
+        System.out.println("Stammbaum des geklonten Thomas Schneider:");
+        print(person4_clone, "");
     }
 }
