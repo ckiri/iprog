@@ -3,12 +3,12 @@ package first;
 /**
  *Der Benutzer wird aufgefordert, den Namen einer der (in der Klasse Math 
  *vorhandenen) mathematischen Funktionen sin, cos, exp, log, 
- *sqrt, tan oder aber square , cube , quad und tower (für die 
+ *sqrt, tan oder aber square , cube , quad und tower (fÃ¼r die 
  *Berechnung von Potenzen x^x^x) einzugeben. 
- *Wurde eine Funktion eingegeben, sollen Zahlwerte für Beginn, Schrittweite, 
- *und Ende erfragt und eingelesen und anschließend die Funktion geplottet 
+ *Wurde eine Funktion eingegeben, sollen Zahlwerte fÃ¼r Beginn, Schrittweite, 
+ *und Ende erfragt und eingelesen und anschlieÃŸend die Funktion geplottet 
  *(ausgegeben) werden.
- *Danach kann gleich wieder die nächste Funktion geplottet werden (Fortsetzung 
+ *Danach kann gleich wieder die nÃ¤chste Funktion geplottet werden (Fortsetzung 
  *also bei Schritt 1). Nur wenn statt des Funktionsnamens stop eingegeben 
  *wurde, soll das Programm enden.
 
@@ -37,10 +37,10 @@ public class MathPlotter {
 		while(true) {
 			
 			//Einlesen der beliebigen Funktion
-			funktion = MyIO.promtAndRead("Wählen Sie eine dieser Funktionen aus: sin, cos, exp, log, sqrt, tan, square, "
+			funktion = MyIO.promtAndRead("WÃ¤hlen Sie eine dieser Funktionen aus: sin, cos, exp, log, sqrt, tan, square, "
 					+ "cube, quad oder tower ('stop' eingeben um das Programm zu beenden): ");
 			
-			//wenn stop eingegeben ist, hört das Programm auf
+			//wenn stop eingegeben ist, hÃ¶rt das Programm auf
 			if(funktion.equals("stop")) {
 				System.out.println("Sie haben das Programm beendet. Auf Wiedersehen :)");
 				break;
@@ -65,7 +65,7 @@ public class MathPlotter {
 			}); break;
 			case "exp" : plot(new D2Method(){
 				public double compute(double a) {
-					return Math.cos(Math.toRadians(a));						
+					return Math.exp(a);						
 				}
 			}); break;
 			case "log" : plot(new D2Method(){
@@ -104,7 +104,7 @@ public class MathPlotter {
 				}
 			}); break;
 			
-			//ungültige Eingabe, nochmal fragen
+			//ungÃ¼ltige Eingabe, nochmal fragen
 			default: System.out.println("Diese Funktion existiert nicht: " + funktion);
 			}	  
 		}	
