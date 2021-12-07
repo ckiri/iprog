@@ -19,13 +19,15 @@ public class Person implements Comparable<Person> , Cloneable , SimpleTreeNode
     protected String vorname, name, beruf, geburtsort, größenbereich;
     protected int geburtsjahr, alter;
     protected float körpergröße;
+    protected boolean geschlecht;
 
     private SimpleTreeNode treenode = new DefaultTreeNode("");
 
-    public Person(String vorname, String n, String b, String gbo, int gb, float gr)
+    public Person(String n, String vorn, Boolean g, String b, String gbo, int gb, float gr)
     {
-        this.vorname = vorname;
+        this.vorname = vorn;
         this.name = n;
+        this.geschlecht = g;
         this.beruf = b;
         this.geburtsort = gbo;
         this.geburtsjahr = gb;
@@ -41,6 +43,27 @@ public class Person implements Comparable<Person> , Cloneable , SimpleTreeNode
         System.out.println("Beschreibe eine Person:");
         this.vorname = MyIO.promtAndRead("Vorname: ");
         this.name = MyIO.promtAndRead("Name: ");
+
+        int i = 0;
+        do 
+        { 
+            String g = MyIO.promtAndRead("Geschlecht (m/w): ");
+            switch (g) 
+            {
+                case "m":
+                    this.geschlecht = true; i++;
+                    break;
+            
+                case "w":
+                    this.geschlecht = false; i++;
+                    break;
+
+                default:
+                    System.out.println("Versuch es bitte noch einmal.");
+                    break;
+            }
+        } while(i == 0);
+
         this.beruf = MyIO.promtAndRead("Beruf: ");
         this.geburtsort = MyIO.promtAndRead("Geburtsort: ");
         this.geburtsjahr = MyIO.readInt("Geburtsjahr: ");
@@ -77,9 +100,11 @@ public class Person implements Comparable<Person> , Cloneable , SimpleTreeNode
     @Override   //toString Methode von Anfang an vorhanden, wird überschrieben für logischere Ausgabe
     public String toString()
     {
+        String gesch = this.geschlecht == true ? "er " : "sie ";
+
         return this.name + " " + this.vorname + ", arbeitet als " + this.beruf 
             + ", ist " + this.körpergröße + "m " + this.größenbereich + " und wurde im Jahr " + this.geburtsjahr 
-                + " in " + this.geburtsort + " geboren, damit ist er/ sie " + this.alter + " Jahre alt.";
+                + " in " + this.geburtsort + " geboren, damit ist " + gesch + this.alter + " Jahre alt.";
     }
 
     public void compareWith(Person x)
@@ -123,7 +148,7 @@ public class Person implements Comparable<Person> , Cloneable , SimpleTreeNode
     @Override
     public int compareTo(Person o) 
     {
-        return (vorname + name).compareTo(o.vorname + o.name);
+        return (name + vorname).compareTo(o.name + o.vorname);
     }
 
     public static void bubbleSort(Person[] p) 
@@ -162,34 +187,38 @@ public class Person implements Comparable<Person> , Cloneable , SimpleTreeNode
 
     public static void print (Person n, String indent)
     {
-        System.out.println (indent + n.name + " " + n.vorname);
+        System.out.println (indent + n.vorname + " " + n.name);
         for (int i=0; i < n.getChildCnt(); i++)
         {
-            print ((Person)n.getChild(i), indent+" ");
+            print((Person) n.getChild(i), indent + " ");
         }
     }
 
    
     public Person clone()
     {
-        Person x = new Person(vorname, name, beruf, geburtsort, geburtsjahr, körpergröße);
-        x.treenode = this.treenode;
+        Person x = new Person(name, vorname, geschlecht, beruf, geburtsort, geburtsjahr, körpergröße);
+
+        for (int i = 0; i < getChildCnt(); i++) 
+        {
+            x.treenode.addChild( ((Person) this.getChild(i)).clone() );
+        }
         return x;
     }
 
     public static void main (String[] args)
     {
-        Person person1 = new Person("Biden", "Joseph", "Präsident der Vereinigten Staaten", "Pennsylvania", 1942, 1.8f);
-        Person person2 = new Person("Mustermann", "Max", "Kaufmann", "Heilbronn", 1975, 2.1f);
-        Person person3 = new Person("Mustermann", "Corinna", "Softwareentwicklerin", "Berlin", 1987, 1.6f);
-        Person person4 = new Person("Schneider", "Thomas", "Fußballer", "München", 1979, 1.7f);
-        Person person41 = new Person("Schneider", "Erika", "Köchin", "München", 1999, 1.6f);
-        Person person411 = new Person("Schneider", "Dominik", "Schüler", "München", 2008, 1.5f);
-        Person person42 = new Person("Schneider", "Denis", "Fußballer", "München", 2000, 1.75f);
-        Person person421 = new Person("Schneider", "Vitali", "Rennfahrer", "München", 2008, 1.7f);
-        Person person422 = new Person("Schneider", "Lukas", "Student", "München", 2007, 1.65f);
-        Person person4221 = new Person("Schneider", "Arne", "Neugeboren", "München", 2021, 1.7f);
-        Person person43 = new Person("Schneider", "Chris", "Mechaniker", "München", 1989, 1.8f);
+        Person person1 = new Person("Biden", "Joseph", true, "Präsident der Vereinigten Staaten", "Pennsylvania", 1942, 1.8f);
+        Person person2 = new Person("Mustermann", "Max", true, "Kaufmann", "Heilbronn", 1975, 2.1f);
+        Person person3 = new Person("Mustermann", "Corinna", false, "Softwareentwicklerin", "Berlin", 1987, 1.6f);
+        Person person4 = new Person("Schneider", "Thomas", true, "Fußballer", "München", 1979, 1.7f);
+        Person person41 = new Person("Schneider", "Erika", false, "Köchin", "München", 1999, 1.6f);
+        Person person411 = new Person("Schneider", "Dominik", true, "Schüler", "München", 2008, 1.5f);
+        Person person42 = new Person("Schneider", "Denis", true, "Fußballer", "München", 2000, 1.75f);
+        Person person421 = new Person("Schneider", "Vitali", true, "Rennfahrer", "München", 2008, 1.7f);
+        Person person422 = new Person("Schneider", "Lukas", true, "Student", "München", 2007, 1.48f);
+        Person person4221 = new Person("Schneider", "Arne", true, "Zusteller ", "München", 2009, 1.5f);
+        Person person43 = new Person("Schneider", "Chris", true, "Mechaniker", "München", 1989, 1.8f);
 
         Person p[] = {person1, person2, person3, person4, person41, person411, person42, person421, person422, person4221, person43};
 
@@ -213,10 +242,7 @@ public class Person implements Comparable<Person> , Cloneable , SimpleTreeNode
 
 
         System.out.println();
-        System.out.println("Stammbaum aller Personen:");
-        print(person1, "");
-        print(person2, "");
-        print(person3, "");
+        System.out.println("Stammbaum von Thomas Schneider:");
         print(person4, "");
 
         Person person4_clone = person4.clone();
