@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 /**
  * @author DDeifel, DMaric, DAgres, CKiriakou
- * @version 2, 25.10.2021
+ * @version 3, 13.12.2021
  */
 
 public final class MyIO
