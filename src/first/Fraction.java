@@ -9,54 +9,113 @@ import java.math.BigInteger;
 
 public class Fraction extends Number implements Comparable<Fraction>
 {
-    private BigInteger zaehler;
-    private BigInteger nenner;
+    /**
+     * Not a Number: special value ... after division by 0
+     */
+    final static Fraction NaN = new Fraction(BigInteger.ZERO, BigInteger.ZERO); //when we divide by 0 
 
-    public Fraction(BigInteger a, BigInteger b)
-    {
-        this.zaehler = a;
-        this.nenner = b;
-    }
+    private BigInteger numerator;
+    private BigInteger denominator;
 
+    /**
+     * @return the numerator
+     */
     public BigInteger getNenner() 
     {
-        return this.nenner;
+        return this.denominator;
     }
 
+    /**
+     * @return the denominator
+     */
     public BigInteger getZaehler() 
     {
-        return this.zaehler;    
+        return this.numerator;    
+    }
+
+    /**
+     * will construct a reduced and normalized Fraction or special value NaN if this is impossible
+     * @param a numerator
+     * @param b denominator 
+     */
+    public Fraction(BigInteger a, BigInteger b)
+    {
+        numerator = a;
+        denominator = b;
+        switch ( denominator.signum() ) //now normalize 
+        {
+            case 0:
+                numerator = BigInteger.ZERO;    //it is NaN
+                break;
+            case -1:    ////switch signs
+                numerator = numerator.negate();
+                denominator = denominator.negate(); //no break here
+            case 1:
+                BigInteger x = numerator.gcd(denominator);  //compute gcd
+                numerator = numerator.divide(x);    //reduce with gcd
+                denominator = denominator.divide(x);
+                break;
+        }
+    }
+
+    public Fraction(long a, long b) 
+    {
+        numerator = BigInteger.valueOf(a); 
+        denominator = BigInteger.valueOf(b);
+        
+        switch ( denominator.signum() ) //now normalize 
+        {
+            case 0:
+                numerator = BigInteger.ZERO;    //it is NaN
+                break;
+            case -1:    ////switch signs
+                numerator = numerator.negate();
+                denominator = denominator.negate(); //no break here
+            case 1:
+                BigInteger x = numerator.gcd(denominator);  //compute gcd
+                numerator = numerator.divide(x);    //reduce with gcd
+                denominator = denominator.divide(x);
+                break;
+        }
     }
 
     public Fraction add(Fraction o) 
     {
         Fraction x = new Fraction(BigInteger.ONE, BigInteger.ONE);
-        if ( nenner.equals(o.nenner) )
+        if ( denominator.equals(o.denominator) )
         {
-            x.nenner = nenner;
-            x.zaehler = zaehler.add(o.zaehler);
+            x.denominator = denominator;
+            x.numerator = numerator.add(o.numerator);
         }
         else
         {
-            x.nenner = getKgV( nenner, o.nenner);
-            x.zaehler = zaehler.multiply(nenner.divide(x.nenner)).add(o.zaehler.multiply(o.nenner.divide(x.nenner)));
+            x.denominator = getKgV( denominator, o.denominator);
+            x.numerator = numerator.multiply(x.denominator.divide(denominator)).add(o.numerator.multiply(x.denominator.divide(o.denominator)));
         }
+
+        BigInteger g = x.numerator.gcd(x.denominator);
+        x.denominator = x.denominator.divide(g);
+        x.numerator = x.numerator.divide(g);
         return x;
     }
 
     public Fraction subtract(Fraction o) 
     {
         Fraction x = new Fraction(BigInteger.ONE, BigInteger.ONE);
-        if ( nenner.equals(o.nenner) )
+        if ( denominator.equals(o.denominator) )
         {
-            x.nenner = nenner;
-            x.zaehler = zaehler.add(o.zaehler);
+            x.denominator = denominator;
+            x.numerator = numerator.subtract(o.numerator);
         }
         else
         {
-            x.nenner = getKgV( nenner, o.nenner);
-            x.zaehler = zaehler.multiply(nenner.divide(x.nenner)).subtract(o.zaehler.multiply(o.nenner.divide(x.nenner)));
+            x.denominator = getKgV( denominator, o.denominator);
+            x.numerator = numerator.multiply(x.denominator.divide(denominator)).subtract(o.numerator.multiply(x.denominator.divide(o.denominator)));
         }
+        
+        BigInteger g = x.numerator.gcd(x.denominator);
+        x.denominator = x.denominator.divide(g);
+        x.numerator = x.numerator.divide(g);
         return x;
     }
 
@@ -69,11 +128,12 @@ public class Fraction extends Number implements Comparable<Fraction>
     {
         Fraction x = new Fraction(BigInteger.ONE, BigInteger.ONE);
         
-        x.nenner = nenner.multiply(o.nenner);
-        x.zaehler = zaehler.multiply(o.zaehler);
+        x.denominator = denominator.multiply(o.denominator);
+        x.numerator = numerator.multiply(o.numerator);
 
-        x.nenner = x.nenner.divide(x.zaehler.gcd(x.nenner));
-        x.zaehler = x.zaehler.divide(x.zaehler.gcd(x.nenner));
+        BigInteger g = x.numerator.gcd(x.denominator);
+        x.denominator = x.denominator.divide(g);
+        x.numerator = x.numerator.divide(g);
 
         return x;
     }
@@ -82,11 +142,12 @@ public class Fraction extends Number implements Comparable<Fraction>
     {
         Fraction x = new Fraction(BigInteger.ONE, BigInteger.ONE);
         
-        x.nenner = nenner.multiply(o.zaehler);
-        x.zaehler = zaehler.multiply(o.nenner);
+        x.denominator = denominator.multiply(o.numerator);
+        x.numerator = numerator.multiply(o.denominator);
 
-        x.nenner = x.nenner.divide(x.zaehler.gcd(x.nenner));
-        x.zaehler = x.zaehler.divide(x.zaehler.gcd(x.nenner));
+        BigInteger g = x.numerator.gcd(x.denominator);
+        x.denominator = x.denominator.divide(g);
+        x.numerator = x.numerator.divide(g);
 
         return x;
     }
@@ -94,61 +155,49 @@ public class Fraction extends Number implements Comparable<Fraction>
     public boolean isInteger()
     {
         BigInteger x = BigInteger.valueOf(0);
-        return zaehler.mod(nenner).equals(x);
+        return numerator.mod(denominator).equals(x);
     }
 
     @Override
     public String toString() 
     {
-        if ( nenner.equals(BigInteger.ONE) ) return zaehler + ""; 
-        else return zaehler + "/" + nenner;
+        return denominator.signum() == 0 ? "NaN" : numerator + (denominator.equals(BigInteger.ONE) ? "" : "/" + denominator);
     }
 
     @Override
     public int intValue()
     {
-        return (zaehler.divide(nenner)).intValue();
+        return numerator.intValue() / denominator.intValue();
     }
 
     @Override
     public long longValue() 
     {
-        return (zaehler.divide(nenner)).longValue();
+        return numerator.longValue() / denominator.longValue();
     }
 
     @Override
     public float floatValue() 
     {
-        return (zaehler.divide(nenner)).floatValue();
+        return numerator.floatValue() / denominator.floatValue();
     }
 
     @Override
     public double doubleValue() 
     {
-        return (zaehler.divide(nenner)).doubleValue();
+        return numerator.doubleValue() / denominator.doubleValue();
     }
 
     /**
-     * @return -1, 0 or 1 as this Fraction is numerically less than, equal
-     *         to, or greater than other Fracton.
+     * @return -1, 0 or 1 as this Fraction is numerically less than, equal to, or greater than other Fracton.
      */
     @Override
-    public int compareTo(Fraction other) 
+    public int compareTo(Fraction o) 
     {
-        if ( ((this.zaehler).divide(this.nenner)).equals( other.zaehler.divide(other.nenner)) )
-        {
-            return 0;
-        }
-        else
-        {
-            if (zaehler.divide(nenner) == zaehler.divide(nenner).max( other.zaehler.divide(other.nenner) ))
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        }
+        if ( this.equals(NaN) && o.equals(NaN) ) {return 0;}
+        if ( this.equals(NaN) ) {return -1;}
+        if ( o.equals(NaN)) {return 1;}
+
+        return numerator.multiply(o.denominator).compareTo(o.numerator.multiply(denominator));   
     }
 }
