@@ -129,4 +129,16 @@ public final class MyIO
     {
         System.out.println(s);
     }
+
+    public static Fraction readFraction (String prompt){
+        while(true){
+            try{
+                System.out.println(prompt);
+                return new Fraction(BigInteger.valueOf(Long.parseLong(sc.nextLine())), BigInteger.valueOf(Long.parseLong(sc.nextLine())) );
+            } catch (Exception e){
+                System.out.println("Kein Datentyp-Fraction gerechte Zahl!");
+            }
+        }
+    }
+
 }
