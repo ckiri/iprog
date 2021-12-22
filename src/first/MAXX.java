@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class MAXX {
 
-    public static Fraction randomNumber(){
+     public static Fraction randomNumber(){
         BigInteger randomNumber0;
         BigInteger randomNumber1;
 
@@ -28,13 +28,24 @@ public class MAXX {
 
     }
 
+    public static String top(){
+        return "---------------------------------------------------------------------------------";
+    }
+    public static String side(){
+        return "|";
+    }
+
     public static void print2DBrett (Fraction[][] brett){
+
         for (int i = 0; i < brett.length; i++) {       //row
+            System.out.println(top());
             for (int j = 0; j < brett[i].length; j++) {   //column
                 brett[i][j] = randomNumber();
-                System.out.print(brett[i][j] + " ");
+                System.out.printf(  side() + " " +  brett[i][j] + " ");
+                if (j == brett[i].length - 1) System.out.print(side());
             }
             System.out.println();
+            if (i == brett.length - 1) System.out.print(top());
         }
     }
 
